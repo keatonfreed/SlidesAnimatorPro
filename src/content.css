@@ -1,0 +1,618 @@
+:root {
+    --sap_black: #000000ff;
+    --sap_rich-black: #0c1821ff;
+    --sap_oxford-blue: #1b2a41ff;
+    --sap_charcoal: #324a5fff;
+    --sap_lavender-web: #ccc9dcff;
+
+    --sap_background: var(--sap_rich-black)
+}
+
+/* whoel area */
+.punch-animation-sidebar {
+    background-color: var(--sap_background) !important;
+    color: white !important;
+}
+
+.punch-animation-sidebar-header {
+    color: white !important;
+    background-color: var(--sap_background) !important;
+}
+
+/* transitions area */
+.punch-sidebar-tile-header {
+    background-color: var(--sap_background) !important;
+    color: white !important;
+}
+
+.punch-sidebar-tile-header>* {
+    filter: brightness(50);
+}
+
+.punch-animation-sidebar-transition-header {
+    background-color: var(--sap_background) !important;
+    color: white !important;
+}
+
+.punch-sidebar-tile-options {
+    background-color: var(--sap_background) !important;
+}
+
+.punch-sidebar-tile-options>* {
+    background-color: var(--sap_background) !important;
+    color: white !important;
+}
+
+.punch-sidebar-tile-options .punch-sidebar-tile-type-select div>div>.docs-material-gm-select-caption {
+    color: white !important;
+}
+
+.punch-sidebar-tile-options .punch-sidebar-tile-type-select div>div>.docs-material-gm-select-dropdown {
+    filter: brightness(50);
+}
+
+.punch-sidebar-tile-options .punch-toggle-slider-button-container>* {
+    color: white !important;
+}
+
+.punch-sidebar-tile-options .punch-animation-sidebar-add {
+    background-color: var(--sap_background) !important;
+    color: white !important;
+}
+
+.punch-animation-sidebar-controls-container .punch-animation-sidebar-controls {
+    background-color: var(--sap_background) !important;
+    color: white !important;
+}
+
+/* main tiles */
+.punch-animation-sidebar-animation-header {
+    background-color: var(--sap_background) !important;
+    color: white !important;
+}
+
+.punch-animation-sidebar-tile-container {
+    color: white !important;
+    background-color: var(--sap_background) !important;
+}
+
+.punch-animation-sidebar-tile-container .punch-sidebar-tile {
+    color: white !important;
+    background-color: var(--sap_background) !important;
+}
+
+.punch-animation-sidebar-tile-container .punch-sidebar-tile>* {
+    /* filter: brightness(50); */
+}
+
+
+
+
+
+/* .punch-animation-sidebar * {
+    background-color: red !important;
+} */
+
+
+
+
+
+
+
+
+/* .punch-animation-sidebar {
+    border-left: 0;
+    font-size: 14px;
+    min-height: 142px;
+    outline-style: none;
+    position: absolute;
+    right: 0;
+    -webkit-user-select: none;
+    user-select: none;
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: none;
+    outline: none;
+    overflow: hidden;
+    width: 300px;
+    margin: 6px 16px 16px
+}
+
+.has-right-rail .punch-animation-sidebar {
+    margin-left: 0;
+    margin-right: 0
+}
+
+.punch-animation-sidebar-header {
+    align-items: center;
+    background-color: #fff;
+    border-bottom: 1px solid #dadce0;
+    border-top: none;
+    color: #202124;
+    display: flex;
+    font-family: Google Sans, Roboto, sans-serif;
+    font-size: 16px;
+    height: 56px;
+    padding: 0 16px;
+    z-index: 2;
+    position: relative
+}
+
+.punch-animation-sidebar-header-text {
+    font-family: Google Sans, Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    position: relative;
+    left: auto;
+    margin-bottom: auto;
+    margin-top: auto
+}
+
+.docs-sidebar-close-button.punch-animation-sidebar-close {
+    line-height: 35px
+}
+
+.punch-animation-sidebar-playhead.docs-icon {
+    height: 14px;
+    width: 16px
+}
+
+.punch-animation-sidebar-playhead {
+    left: 0;
+    position: absolute;
+    margin-left: -11px;
+    margin-top: -6px
+}
+
+.punch-animation-sidebar-playhead-icon, .punch-animation-sidebar-playhead-icon-rtl {
+    margin-left: -2px;
+    margin-top: -3px
+}
+
+.punch-animation-sidebar-scroll {
+    overflow: auto;
+    overflow-x: hidden
+}
+
+.punch-animation-sidebar-controls-float {
+    bottom: 0;
+    height: 120px;
+    overflow: hidden;
+    position: absolute
+}
+
+.punch-animation-sidebar-controls-float .punch-animation-sidebar-controls {
+    background: #fff;
+    bottom: 0;
+    position: absolute
+}
+
+.punch-animation-sidebar-play, .punch-animation-sidebar-stop {
+    display: inline-block;
+    min-width: 0
+}
+
+.punch-animation-sidebar-controls, .punch-sidebar-tile, .punch-sidebar-tile-drop-target-bottom, .punch-sidebar-tile-drop-target-top, .punch-sidebar-tile-header {
+    width: 100%
+}
+
+.punch-animation-sidebar-controls, .punch-sidebar-tile-header, .punch-sidebar-tile.punch-animation-tile-drop-top:first-child {
+    border-top: 1px solid #dadce0
+}
+
+.punch-sidebar-tile:first-child .punch-sidebar-tile-header {
+    border-top-color: #fff
+}
+
+.punch-animation-tile-after-previous .punch-sidebar-tile-header {
+    border-top: 1px dashed #dadce0
+}
+
+.punch-sidebar-tile-drop-target-bottom, .punch-sidebar-tile-drop-target-top {
+    display: none
+}
+
+.punch-animation-tile-drop-bottom .punch-sidebar-tile-drop-target-bottom, .punch-animation-tile-drop-top .punch-sidebar-tile-drop-target-top {
+    display: block
+}
+
+.punch-animation-tile-picked-up .punch-sidebar-tile-header, .punch-animation-tile-picked-up .punch-sidebar-tile-options {
+    display: none
+}
+
+.punch-animation-tile-drag .punch-sidebar-tile-header {
+    cursor: move
+}
+
+.punch-animation-tile-drag .punch-sidebar-tile-drop-target-bottom, .punch-animation-tile-drag .punch-sidebar-tile-drop-target-top {
+    display: none
+}
+
+.punch-animation-sidebar .docs-material-slider-thumb-grabber, .punch-animation-sidebar .docs-material-slider-track-on {
+    background-color: #fbbc04;
+    border-color: #fbbc04
+}
+
+.punch-animation-sidebar .docs-material-slider-focus-ring {
+    background-color: rgba(251, 188, 4, .38)
+}
+
+.punch-sidebar-tile-header {
+    cursor: pointer;
+    position: relative;
+    line-height: 40px
+}
+
+.punch-sidebar-tile-header:focus {
+    outline: none
+}
+
+.punch-sidebar-tile-thumbnail {
+    height: 24px;
+    width: 24px
+}
+
+.punch-transition-tile-unsupported-icon {
+    margin-left: 0;
+    margin-top: 0
+}
+
+.punch-transition-unsupported-bubble {
+    color: #888;
+    cursor: default;
+    line-height: normal;
+    width: 150px
+}
+
+.punch-transition-unsupported-controls {
+    padding-top: 8px
+}
+
+.punch-transition-unsupported-dismiss, .punch-transition-unsupported-more {
+    color: #15c;
+    cursor: pointer;
+    display: inline-block
+}
+
+.punch-transition-unsupported-dismiss:hover, .punch-transition-unsupported-more:hover {
+    text-decoration: underline
+}
+
+.punch-sidebar-tile-header-text-container {
+    line-height: 1.4
+}
+
+.punch-sidebar-tile-header-subtext, .punch-sidebar-tile-header-text {
+    color: #3c4043;
+    display: inline-block;
+    font-size: 14px
+}
+
+.punch-sidebar-tile-delete .docs-icon {
+    height: 24px;
+    width: 24px
+}
+
+.punch-sidebar-tile-delete-disabled:hover {
+    cursor: default;
+    text-decoration: none
+}
+
+.punch-animation-tile-drag .punch-sidebar-tile-delete.punch-animation-sidebar-link.goog-flat-button, .punch-sidebar-tile-collapsed .punch-sidebar-tile-delete.punch-animation-sidebar-link.goog-flat-button {
+    display: none
+}
+
+.punch-sidebar-tile-options {
+    background-color: #fff;
+    overflow: hidden;
+    padding: 0 16px 20px 16px
+}
+
+.punch-transition-tile .punch-sidebar-tile-options, .punch-transition-tile .punch-sidebar-tile-options .punch-sidebar-tile-collapsed {
+    background: #fff
+}
+
+.punch-sidebar-tile-type-select, .punch-toggle-slider-button-container {
+    width: 100%
+}
+
+.punch-sidebar-tile-type-select {
+    background: #fff;
+    cursor: default;
+    font-size: 14px;
+    margin: 15px 0 0 0;
+    padding: 0;
+    text-align: left
+}
+
+.punch-sidebar-tile-type-select .goog-flat-menu-button-caption {
+    padding-left: 10px
+}
+
+.punch-transition-tile-apply-all {
+    border-color: #f8f9fa;
+    margin-left: 0;
+    margin-top: 15px
+}
+
+.docs-material-button-hairline-default.docs-material-button, .punch-transition-tile-apply-all, .punch-transition-tile-apply-all.docs-material-button-focused.docs-material-button-no-focus-border, .punch-transition-tile-apply-all.docs-material-button-hover {
+    color: #202124;
+    font-size: 12px;
+    padding: 9px 12px 11px 12px;
+    min-width: 166px;
+    max-width: 268px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: unset;
+    white-space: nowrap
+}
+
+.punch-animation-tile-paragraph {
+    cursor: default;
+    margin-top: 15px
+}
+
+.punch-animation-tile-paragraph .jfk-checkbox {
+    cursor: inherit
+}
+
+.punch-animation-tile-paragraph-label {
+    color: #515151;
+    padding-left: 10px
+}
+
+.punch-toggle-slider {
+    height: 19px
+}
+
+.punch-toggle-slider-button-container {
+    font-size: 11px;
+    height: 11px;
+    margin-top: 3px;
+    position: relative
+}
+
+.punch-toggle-slider-min {
+    line-height: 11px;
+    position: absolute;
+    top: 0
+}
+
+.punch-toggle-slider-med {
+    line-height: 11px;
+    margin-left: 33%;
+    margin-right: 33%;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 33%
+}
+
+.punch-toggle-slider-max {
+    line-height: 11px;
+    position: absolute;
+    right: 0;
+    top: 0
+}
+
+.punch-toggle-slider-button {
+    cursor: pointer
+}
+
+.punch-toggle-slider-button-container .punch-toggle-slider-button {
+    color: #5f6368;
+    font-weight: 400
+}
+
+.punch-toggle-slider-button:hover {
+    text-decoration: underline
+}
+
+.punch-toggle-slider-button-selected {
+    color: #202124;
+    cursor: default;
+    font-weight: 400
+}
+
+.punch-toggle-slider-disabled .punch-toggle-slider-button {
+    opacity: .38;
+    cursor: default
+}
+
+.punch-toggle-slider-disabled .punch-toggle-slider-button:hover {
+    text-decoration: none
+}
+
+.punch-animation-tile-delay-input {
+    margin-top: 15px
+}
+
+.punch-animation-preview-pane {
+    cursor: pointer;
+    background: #eee;
+    left: 0;
+    position: absolute;
+    top: 0
+}
+
+.punch-animation-preview-pane-black {
+    background: #000
+}
+
+.punch-viewer-svgpage {
+    width: 100%
+}
+
+.punch-viewer-svgpage {
+    height: 100%;
+    position: absolute
+}
+
+.punch-animation-preview-content {
+    overflow: hidden;
+    position: absolute
+}
+
+.punch-viewer-pageloadstatus-link {
+    color: #11c;
+    cursor: pointer;
+    text-decoration: underline
+}
+
+.motion-ui.punch-animation-sidebar {
+    color: #3c4043
+}
+
+.motion-ui .punch-animation-sidebar-header {
+    color: #202124
+}
+
+.motion-ui .punch-animation-sidebar-tile-container, .punch-animation-sidebar-transition-container {
+    padding-left: 8px
+}
+
+.motion-ui .punch-animation-sidebar-tile-container {
+    background: #fff;
+    border-top: 1px solid #dadce0
+}
+
+.punch-animation-sidebar-animation-header, .punch-animation-sidebar-transition-header {
+    background-color: #fff;
+    font-family: Google Sans, Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 58px;
+    margin-left: 8px
+}
+
+.motion-ui .jfk-button-label {
+    margin: 0
+}
+
+.motion-ui .punch-animation-sidebar-add.jfk-button.goog-flat-button {
+    align-items: center;
+    display: inline-flex;
+    height: 24px;
+    margin: 12px 16px;
+    padding: 4px 12px 4px 4px
+}
+
+.motion-ui .punch-animation-sidebar-add-section {
+    border-bottom: 1px solid #dadce0;
+    width: 100%
+}
+
+.motion-ui .punch-animation-sidebar-add-icon {
+    margin-right: 4px
+}
+
+.motion-ui .goog-flat-button-disabled .punch-animation-sidebar-add-icon path {
+    fill: #3c4043
+}
+
+.motion-ui .punch-animation-sidebar-controls-shadow {
+    box-shadow: 0 2px 6px 2px rgba(60, 64, 67, .15)
+}
+
+.motion-ui .punch-animation-sidebar-play, .motion-ui .punch-animation-sidebar-stop {
+    margin: 16px
+}
+
+.motion-ui .punch-sidebar-tile-header {
+    align-items: start;
+    background: #fff;
+    display: flex
+}
+
+.motion-ui.punch-animation-tile-drag {
+    width: 292px
+}
+
+.motion-ui .punch-sidebar-tile-drop-target-bottom, .motion-ui .punch-sidebar-tile-drop-target-top {
+    background: #bdc1c6;
+    height: 61px
+}
+
+.motion-ui .punch-sidebar-tile-collapsed.punch-animation-tile-highlighted .punch-sidebar-tile-header, .motion-ui.punch-sidebar-tile-collapsed.punch-animation-tile-highlighted .punch-sidebar-tile-header {
+    background: #e8f0fe
+}
+
+.motion-ui.punch-animation-tile-drag .punch-sidebar-tile-header {
+    display: flex
+}
+
+.punch-sidebar-tile-chevron.docs-icon {
+    flex: none;
+    height: 24px;
+    margin: 0;
+    transition: transform .1s;
+    width: 24px;
+    display: block
+}
+
+.punch-sidebar-tile-collapsed .punch-sidebar-tile-chevron {
+    transform: rotate(-90deg)
+}
+
+.punch-sidebar-tile-chevron-wrapper {
+    height: 24px;
+    overflow: hidden;
+    margin: 18px 8px 18px 0;
+    width: 24px
+}
+
+.motion-ui .punch-sidebar-tile-thumbnail {
+    flex: none;
+    margin: 18px 8px 18px 0
+}
+
+.motion-ui .punch-sidebar-tile-header-content {
+    align-self: center;
+    flex: auto;
+    margin: 8px 0;
+    outline: none
+}
+
+.motion-ui .punch-sidebar-tile-header-subtext, .motion-ui .punch-sidebar-tile-header-text {
+    margin: 0 0 0 8px
+}
+
+.motion-ui .punch-transition-tile-unsupported-icon-outer.docs-icon {
+    margin: 11px
+}
+
+.motion-ui .punch-sidebar-tile-drag-handle {
+    cursor: move;
+    flex: none;
+    height: 24px;
+    margin: 18px 8px;
+    width: 24px
+}
+
+.motion-ui .goog-zippy-expanded .punch-sidebar-tile-drag-handle {
+    display: none
+}
+
+.motion-ui .punch-sidebar-tile-delete {
+    flex: none;
+    margin-left: 8px;
+    padding-right: 8px;
+    padding-top: 10px
+}
+
+.motion-ui .punch-sidebar-tile-delete .docs-icon {
+    margin: 0
+}
+
+.motion-ui .punch-sidebar-tile-options {
+    padding-left: 8px
+}
+
+.motion-ui .punch-sidebar-tile-collapsed .punch-sidebar-tile-header:focus, .motion-ui .punch-sidebar-tile-collapsed .punch-sidebar-tile-header:hover {
+    background-color: #e8eaed
+}
+
+.docs-hub .punch-animation-sidebar {
+    border: 1px solid #c7c7c7
+} */
