@@ -25,7 +25,7 @@
     color: white !important;
 }
 
-.punch-sidebar-tile-header>* {
+.punch-sidebar-tile-header>*:not(.punch-sidebar-tile-thumbnail) {
     filter: brightness(50);
 }
 
