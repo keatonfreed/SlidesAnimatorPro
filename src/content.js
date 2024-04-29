@@ -22,7 +22,8 @@ const motionPanelObserver = new MutationObserver(motionPanelCallback);
 
 motionPanelObserver.observe(document.body, motionPanelConfig)
 
-function openSidebar() {
+function openAnimSidebar() {
+    if (document.querySelector(".punch-animation-sidebar") && document.querySelector(".punch-animation-sidebar").style.display !== "none") return
     const sidebarShortcutMac = {
         bubbles: true,
         key: "B",
@@ -59,7 +60,7 @@ function openSidebar() {
 
 
 
-// setTimeout(openSidebar, 3000)
+// setTimeout(openAnimSidebar, 3000)
 
 function runClick(el) {
     // console.log(el)
@@ -100,11 +101,15 @@ function sidebarPatch(sidebar) {
 }
 
 async function openFormatOptions() {
+    if (document.querySelector(".docs-tiled-sidebar") && document.querySelector(".docs-tiled-sidebar").style.display !== "none") return
+
     const menuMore = document.querySelector("#moreButton")
     if (menuMore.getAttribute("aria-hidden") === "false") {
         runClick(menuMore)
     }
-    runClick(document.querySelector("#formatOptionsButton"))
+
+    let formatButton = document.querySelector("#formatOptionsButton").style.display !== "none" ? document.querySelector("#formatOptionsButton") : document.querySelector("#animationButton")
+    runClick(formatButton)
     document.querySelector(".docs-sidebar-tile.sketchy-format-options-position-tile > .docs-sidebar-tile-header.goog-zippy-collapsed")?.click()
     // await new Promise((res) => { setTimeout(res, 3000) })
 }
@@ -158,6 +163,27 @@ async function setFormatPosition(Pos) {
     await new Promise((res) => { setTimeout(res, 200) })
 }
 
+function selectDropdown(dropdownEl, option) {
+    // console.log(dropdownEl)
+    runClick(dropdownEl)
+    let dropdownPreSelected = document.getElementById(dropdownEl.getAttribute("aria-owns"))
+    // console.log(dropdown, latestAnimtype.getAttribute("aria-owns"))
+    let dropdownOptions = dropdownPreSelected.parentElement.childNodes
+    // console.log(dropdownOptions)
+    let optionButton = Array.from(dropdownOptions)?.find(option)
+    // console.log(optionButton)
+    runClick(optionButton)
+    runClick(optionButton)
+}
+
+function addAnimation(animType, animStart) {
+    openAnimSidebar()
+    runClick(document.querySelector(".punch-animation-sidebar-add"))
+    let latestAnim = document.querySelector(".punch-animation-sidebar-tile-container .punch-sidebar-tile:last-child")
+    selectDropdown(latestAnim.querySelector(".punch-sidebar-tile-options .punch-sidebar-tile-type-select[title='Animation type']"), (el) => el.firstChild.textContent === animType)
+    selectDropdown(latestAnim.querySelector(".punch-sidebar-tile-options .punch-sidebar-tile-type-select[title='Start condition']"), (el) => el.firstChild.textContent === animStart)
+}
+
 function interpolateCoordinates(coordsList, numCoords) {
     const result = [];
     for (let i = 0; i < coordsList.length - 1; i++) {
@@ -165,15 +191,19 @@ function interpolateCoordinates(coordsList, numCoords) {
         const [x2, y2] = coordsList[i + 1];
         const deltaX = (x2 - x1) / (numCoords + 1);
         const deltaY = (y2 - y1) / (numCoords + 1);
-        for (let j = 0; j <= numCoords; j++) {
+        for (let j = 1; j <= numCoords; j++) {
             const newX = x1 + j * deltaX;
             const newY = y1 + j * deltaY;
             result.push([newX, newY]);
         }
+        result.push(coordsList[i + 1]);
     }
     return result;
 }
 
+function sleep(time) {
+    return new Promise((res) => { setTimeout(res, time) })
+}
 
 
 let _State = 0
@@ -194,11 +224,20 @@ chrome.runtime.onMessage.addListener(async (message) => {
 
             // const MidPos = [Math.round((Pos2[0] + Pos1[0]) / 2), Math.round((Pos2[1] + Pos1[1]) / 2)]
             console.log("Start", Pos1, "End", Pos2)
-            let interpolatedCoords = interpolateCoordinates([Pos1, Pos2], 50)
+            let interpolatedCoords = interpolateCoordinates([Pos1, Pos2], 10)
             console.log(interpolatedCoords)
-            for (let i = 0; i < interpolatedCoords.length; ++i) {
+            await setFormatPosition(Pos1)
+            addAnimation("Zoom out", "On click")
+            await sleep(1000)
+
+            for (let i = 0; i < interpolatedCoords.length; i += 1) {
+                openFormatOptions()
                 duplicateElement()
                 await setFormatPosition(interpolatedCoords[i])
+
+                await sleep(1000)
+                addAnimation("Fade in", "With Previous")
+                addAnimation("Zoom out", "After Previous")
             }
         }
     }
