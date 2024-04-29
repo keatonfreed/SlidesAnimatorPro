@@ -12,6 +12,7 @@
 .punch-animation-sidebar {
     background-color: var(--sap_background) !important;
     color: white !important;
+    width: 500px !important;
 }
 
 .punch-animation-sidebar-header {
@@ -81,9 +82,18 @@
     background-color: var(--sap_background) !important;
 }
 
-.punch-animation-sidebar-tile-container .punch-sidebar-tile>* {
-    /* filter: brightness(50); */
+.punch-animation-sidebar-tile-container .punch-sidebar-tile.punch-animation-tile-highlighted {
+    filter: brightness(1.4);
 }
+
+/* .punch-animation-sidebar-tile-container .punch-sidebar-tile .punch-sidebar-tile-drag-handle {
+    display: none !important;
+} */
+
+/* .punch-animation-sidebar-tile-container .punch-sidebar-tile .punch-sidebar-tile-delete {
+    display: block !important;
+} */
+
 
 
 
