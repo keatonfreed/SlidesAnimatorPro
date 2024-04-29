@@ -81,6 +81,11 @@
     background-color: var(--sap_background) !important;
 }
 
+.punch-animation-sidebar-tile-container .punch-sidebar-tile.punch-animation-tile-highlighted {
+    color: white !important;
+    background-color: var(--sap_background) !important;
+}
+
 .punch-animation-sidebar-tile-container .punch-sidebar-tile>* {
     /* filter: brightness(50); */
 }
