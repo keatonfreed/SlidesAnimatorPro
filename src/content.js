@@ -151,13 +151,35 @@ function selectDropdown(dropdownEl, option) {
     runClick(optionButton)
 }
 
-async function addAnimation(animType, animStart) {
+async function addAnimation(animType, animStart, time) {
     openAnimSidebar()
     runClick(document.querySelector(".punch-animation-sidebar-add"))
     let latestAnim = document.querySelector(".punch-animation-sidebar-tile-container .punch-sidebar-tile:last-child")
     selectDropdown(latestAnim.querySelector(".punch-sidebar-tile-options .punch-sidebar-tile-type-select[title='Animation type']"), (el) => el.firstChild.textContent === animType)
     // await sleep(1000)
     selectDropdown(latestAnim.querySelector(".punch-sidebar-tile-options .punch-sidebar-tile-type-select[title='Start condition']"), (el) => el.firstChild.textContent === animStart)
+
+    if (time) {
+        // await sleep(550)
+        let slider = latestAnim.querySelector(".docs-material-slider.docs-material-slider-horizontal")
+        let tooltip = slider.querySelector(".jfk-tooltip")
+        for (let i = 0; i < 10; i++) {
+            let prev = Number(tooltip.textContent.slice(0, 3))
+            // console.log(tooltip.textContent, tooltip.textContent.slice(0, 3), prev, time.toFixed(1), time.toFixed(1) > prev)
+            if (time.toFixed(1) > prev) {
+                slider.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", keyCode: 37 }))
+                slider.dispatchEvent(new KeyboardEvent("keyup", { key: "ArrowLeft", keyCode: 37 }))
+            } else {
+                slider.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", keyCode: 39 }))
+                slider.dispatchEvent(new KeyboardEvent("keyup", { key: "ArrowRight", keyCode: 39 }))
+            }
+            // await sleep(50)
+            if (tooltip.textContent === `${time.toFixed(1)} seconds`) {
+                break
+            }
+        }
+        await sleep(500)
+    }
 }
 
 async function focusEditor() {
@@ -208,7 +230,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
 
             // const MidPos = [Math.round((Pos2[0] + Pos1[0]) / 2), Math.round((Pos2[1] + Pos1[1]) / 2)]
             console.log("Start", Pos1, "End", Pos2)
-            let interpolatedCoords = interpolateCoordinates([Pos1, Pos2], 3)
+            let interpolatedCoords = interpolateCoordinates([Pos1, Pos2], 5)
             console.log(interpolatedCoords)
 
             await focusEditor()
@@ -231,10 +253,9 @@ chrome.runtime.onMessage.addListener(async (message) => {
                 await setFormatPosition(interpolatedCoords[i])
 
                 // await sleep(3000)
-                await addAnimation("Fade in", "With previous")
-                await sleep(600)
+                await addAnimation("Appear", "With previous",)
                 if (i !== interpolatedCoords.length - 1) {
-                    await addAnimation("Zoom out", "After previous")
+                    await addAnimation("Zoom out", "After previous", 0.1)
                 }
                 // await sleep(3000)
             }
