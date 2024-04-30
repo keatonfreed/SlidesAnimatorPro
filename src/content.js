@@ -58,15 +58,9 @@ function openAnimSidebar() {
     document.querySelector("#docs-menubar").dispatchEvent(new KeyboardEvent("keydown", osBasedEvent))
     document.querySelector("#docs-menubar").dispatchEvent(new KeyboardEvent("keyup", osBasedEvent))
     console.log("sending open command for sidebar", osBasedEvent, navigator.userAgent.includes('Mac'))
-
-    // setTimeout(runClick, 2000)
 }
 
-
-
-// setTimeout(openAnimSidebar, 3000)
-
-function runClick(el) {
+function runClick(el, onClick) {
     // console.log(el)
     // el = document.querySelector(".punch-sidebar-tile-delete")
     let t = el.getBoundingClientRect();
@@ -92,10 +86,13 @@ function runClick(el) {
         console.log("Abort click, element not visible.", x, y, point, el)
         return false
     }
-    // point.dispatchEvent(downEvent)
-    // point.dispatchEvent(upEvent)
-    el.dispatchEvent(downEvent)
-    el.dispatchEvent(upEvent)
+    if (onClick) {
+        point.dispatchEvent(downEvent)
+        point.dispatchEvent(upEvent)
+    } else {
+        el.dispatchEvent(downEvent)
+        el.dispatchEvent(upEvent)
+    }
     console.log("Element clicked.", x, y, point)
 }
 
@@ -123,73 +120,7 @@ function getFormatPosition() {
     return [Number(document.querySelector(".docs-sidebar-tile.sketchy-format-options-position-tile .sketchy-position-x-input input").value), Number(document.querySelector(".docs-sidebar-tile.sketchy-format-options-position-tile .sketchy-position-y-input input").value)]
 }
 
-function copyElement() {
-    const osBasedEvent = getOSShortcut("C", true, false, false)
-    document.querySelector("#docs-editor").dispatchEvent(new KeyboardEvent("keydown", osBasedEvent))
-    document.querySelector("#docs-editor").dispatchEvent(new KeyboardEvent("keyup", osBasedEvent))
-    console.log("sending copy command for element", osBasedEvent)
-}
-function pasteElement() {
-    const pasteShortcutMac = {
-        bubbles: true,
-        key: "V",
-        keyCode: 86,
-        which: 86,
-        code: "KeyV",
-        location: 0,
-        altKey: false,
-        ctrlKey: false,
-        metaKey: true,
-        shiftKey: false,
-        repeat: false
-    };
-    const pasteShortcut = {
-        bubbles: true,
-        key: "V",
-        keyCode: 86,
-        which: 86,
-        code: "KeyV",
-        location: 0,
-        altKey: false,
-        ctrlKey: true,
-        metaKey: false,
-        shiftKey: false,
-        repeat: false
-    }
-    const osBasedEvent = navigator.userAgent.includes('Mac') ? pasteShortcutMac : pasteShortcut
-    document.querySelector("#docs-editor").dispatchEvent(new KeyboardEvent("keydown", osBasedEvent))
-    document.querySelector("#docs-editor").dispatchEvent(new KeyboardEvent("keyup", osBasedEvent))
-    console.log("sending paste command for element")
-}
 function duplicateElement() {
-    // const duplicateShortcutMac = {
-    //     bubbles: true,
-    //     key: "D",
-    //     keyCode: 68,
-    //     which: 68,
-    //     code: "KeyD",
-    //     location: 0,
-    //     altKey: false,
-    //     ctrlKey: false,
-    //     metaKey: true,
-    //     shiftKey: false,
-    //     repeat: false
-    // };
-    // const duplicateShortcut = {
-    //     bubbles: true,
-    //     key: "D",
-    //     keyCode: 68,
-    //     which: 68,
-    //     code: "KeyD",
-    //     location: 0,
-    //     altKey: false,
-    //     ctrlKey: true,
-    //     metaKey: false,
-    //     shiftKey: false,
-    //     repeat: false
-    // }
-    // const osBasedEvent = navigator.userAgent.includes('Mac') ? duplicateShortcutMac : duplicateShortcut
-
     const osBasedEvent = getOSShortcut("D", true, false, false)
     document.querySelector("#docs-editor").dispatchEvent(new KeyboardEvent("keydown", osBasedEvent))
     document.querySelector("#docs-editor").dispatchEvent(new KeyboardEvent("keyup", osBasedEvent))
@@ -225,29 +156,16 @@ async function addAnimation(animType, animStart) {
     runClick(document.querySelector(".punch-animation-sidebar-add"))
     let latestAnim = document.querySelector(".punch-animation-sidebar-tile-container .punch-sidebar-tile:last-child")
     selectDropdown(latestAnim.querySelector(".punch-sidebar-tile-options .punch-sidebar-tile-type-select[title='Animation type']"), (el) => el.firstChild.textContent === animType)
-    await sleep(1000)
+    // await sleep(1000)
     selectDropdown(latestAnim.querySelector(".punch-sidebar-tile-options .punch-sidebar-tile-type-select[title='Start condition']"), (el) => el.firstChild.textContent === animStart)
 }
 
 async function focusEditor() {
-    // const osBasedEvent = getOSShortcut("B",true,true,true)
-    let osBasedEvent = getOSShortcut("A", true, false, false)
-    document.querySelector("#docs-editor").dispatchEvent(new KeyboardEvent("keydown", osBasedEvent))
-    document.querySelector("#docs-editor").dispatchEvent(new KeyboardEvent("keyup", osBasedEvent))
-    console.log("sending select all command for element", osBasedEvent)
-    await sleep(1000)
 
-    osBasedEvent = getOSShortcut("Tab", false, true, false, 9)
-    document.querySelector(".docs-texteventtarget-iframe").dispatchEvent(new KeyboardEvent("keydown", osBasedEvent))
-    document.querySelector(".docs-texteventtarget-iframe").dispatchEvent(new KeyboardEvent("keyup", osBasedEvent))
-    console.log("sending shift tab command for element", osBasedEvent)
-
-    await sleep(1000)
-    osBasedEvent = getOSShortcut("Tab", false, false, false, 9)
-    document.querySelector(".docs-texteventtarget-iframe").dispatchEvent(new KeyboardEvent("keydown", osBasedEvent))
-    document.querySelector(".docs-texteventtarget-iframe").dispatchEvent(new KeyboardEvent("keyup", osBasedEvent))
-    console.log("sending tab command for element", osBasedEvent)
-    await sleep(1000)
+    // await sleep(3000)
+    let selectedPath = document.querySelector(`#pages g>g>path[stroke="#8ab4f8"][stroke-opacity="0.6"]`)
+    // console.log("SELECTED", selectedPath)
+    runClick(selectedPath)
 }
 
 function interpolateCoordinates(coordsList, numCoords) {
@@ -290,31 +208,35 @@ chrome.runtime.onMessage.addListener(async (message) => {
 
             // const MidPos = [Math.round((Pos2[0] + Pos1[0]) / 2), Math.round((Pos2[1] + Pos1[1]) / 2)]
             console.log("Start", Pos1, "End", Pos2)
-            let interpolatedCoords = interpolateCoordinates([Pos1, Pos2], 10)
+            let interpolatedCoords = interpolateCoordinates([Pos1, Pos2], 3)
             console.log(interpolatedCoords)
 
             await focusEditor()
-            await sleep(5000)
+            // await sleep(5000)
+            // return
             // copyElement()
             // duplicateElement()
             // return
             await setFormatPosition(Pos1)
             addAnimation("Zoom out", "On click")
-            await sleep(1000)
+            // await sleep(1000)
 
             for (let i = 0; i < interpolatedCoords.length; i += 1) {
                 await focusEditor()
-                await sleep(5000)
+                // await sleep(5000)
 
                 openFormatOptions()
-
-                await sleep(1000)
+                duplicateElement()
+                // await sleep(1000)
                 await setFormatPosition(interpolatedCoords[i])
 
-                await sleep(1000)
-                await addAnimation("Fade in", "With Previous")
-                await sleep(1000)
-                await addAnimation("Zoom out", "After Previous")
+                // await sleep(3000)
+                await addAnimation("Fade in", "With previous")
+                await sleep(600)
+                if (i !== interpolatedCoords.length - 1) {
+                    await addAnimation("Zoom out", "After previous")
+                }
+                // await sleep(3000)
             }
         }
     }
