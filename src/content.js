@@ -60,6 +60,7 @@ function openAnimSidebar() {
     console.log("sending open command for sidebar", osBasedEvent, navigator.userAgent.includes('Mac'))
 }
 
+
 function runClick(el, onClick) {
     // console.log(el)
     // el = document.querySelector(".punch-sidebar-tile-delete")
@@ -106,6 +107,13 @@ async function openAnimatorMenu() {
     document.querySelector(".punch-animation-sidebar-scroll").style.display = "none"
     animProMenu.style.display = "block"
 }
+async function closeAnimatorMenu() {
+    openAnimSidebar()
+    if (document.querySelector(".punch-animation-sidebar-scroll")?.style.display !== "none") return
+
+    document.querySelector(".punch-animation-sidebar-scroll").style.display = "block"
+    animProMenu.style.display = "none"
+}
 
 let overlay, overlayText
 function setOverlay(active, current) {
@@ -128,7 +136,7 @@ function setOverlay(active, current) {
     }
 }
 
-let animProMenu, animProMenuAmtTip, animProMenuAmount
+let animProMenu, animProMenuAmtTip, animProMenuAmount, animProMenuStartTip, animProMenuStart, animProMenuEndTip, animProMenuEnd
 function sidebarPatch(sidebar) {
     let title = sidebar.querySelector("#punch-animation-sidebar-title")
     title.textContent = "Animator Pro"
@@ -155,10 +163,7 @@ function sidebarPatch(sidebar) {
     animProMenu.appendChild(animProMenuHeader)
 
     let animProMenuBack = document.createElement("button")
-    animProMenuBack.onclick = () => {
-        document.querySelector(".punch-animation-sidebar-scroll").style.display = "block"
-        animProMenu.style.display = "none"
-    }
+    animProMenuBack.onclick = closeAnimatorMenu
     animProMenuBack.textContent = "Back"
     animProMenuHeader.appendChild(animProMenuBack)
 
@@ -167,19 +172,30 @@ function sidebarPatch(sidebar) {
     animProMenuHeader.appendChild(animProMenuTitle)
 
 
-    let animProMenuStartTip = document.createElement("h1")
-    animProMenuStartTip.textContent = `Start`
+    animProMenuStartTip = document.createElement("h1")
+    animProMenuStartTip.textContent = `Start (${Pos1[0] || 0},${Pos1[1] || 0})`
     animProMenu.appendChild(animProMenuStartTip)
 
-    let animProMenuStart = document.createElement("button")
-    animProMenuStart.textContent = "Reset"
+    animProMenuStart = document.createElement("button")
+    animProMenuStart.textContent = "Set Start"
     animProMenu.appendChild(animProMenuStart)
     animProMenuStart.onclick = (e) => {
         initAnim()
     }
 
+    animProMenuEndTip = document.createElement("h1")
+    animProMenuEndTip.textContent = `End (${Pos2[0] || 0},${Pos2[1] || 0})`
+    animProMenu.appendChild(animProMenuEndTip)
+
+    animProMenuEnd = document.createElement("button")
+    animProMenuEnd.textContent = "Set End"
+    animProMenu.appendChild(animProMenuEnd)
+    animProMenuEnd.onclick = (e) => {
+        endAnim()
+    }
+
     animProMenuAmtTip = document.createElement("h1")
-    animProMenuAmtTip.textContent = `Amount (${AnimAmount})`
+    animProMenuAmtTip.textContent = `Frame Num (${AnimAmount})`
     animProMenu.appendChild(animProMenuAmtTip)
 
     animProMenuAmount = document.createElement("input")
@@ -189,7 +205,7 @@ function sidebarPatch(sidebar) {
     animProMenuAmount.value = AnimAmount
     animProMenuAmount.oninput = (e) => {
         AnimAmount = Number(e.target.value) || 0
-        animProMenuAmtTip.textContent = `Amount (${AnimAmount})`
+        animProMenuAmtTip.textContent = `Frame Num (${AnimAmount})`
     }
     animProMenu.appendChild(animProMenuAmount)
 
@@ -232,6 +248,7 @@ function duplicateElement() {
 }
 
 async function setFormatPosition(Pos) {
+    openFormatOptions()
     document.querySelector(".docs-sidebar-tile.sketchy-format-options-position-tile .sketchy-position-x-input input").value = (Pos[0] + 0.1).toString()
     runClick(document.querySelector(".docs-sidebar-tile.sketchy-format-options-position-tile .sketchy-position-x-input .docs-number-input-down-button"))
     await new Promise((res) => { setTimeout(res, 200) })
@@ -315,15 +332,16 @@ function sleep(time) {
 }
 
 async function initAnim() {
-
     await openFormatOptions()
     Pos1 = getFormatPosition()
     await openAnimatorMenu()
+    animProMenuStartTip.textContent = `Start (${Pos1[0]},${Pos1[1]})`
 }
 async function endAnim() {
     await openFormatOptions()
     Pos2 = getFormatPosition()
     await openAnimatorMenu()
+    animProMenuEndTip.textContent = `End (${Pos2[0]},${Pos2[1]})`
 }
 async function generateAnim() {
     if (!Pos1.length || !Pos2.length) return alert("Start or end position missing!")
@@ -334,34 +352,41 @@ async function generateAnim() {
     console.log(interpolatedCoords)
 
     setOverlay(true, 0)
-    await focusEditor()
-    // await sleep(5000)
-    // return
-    // copyElement()
-    // duplicateElement()
-    // return
-    await setFormatPosition(Pos1)
-    addAnimation("Zoom out", "On click")
-    // await sleep(1000)
-
-    for (let i = 0; i < interpolatedCoords.length; i += 1) {
-        setOverlay(true, i)
+    try {
+        closeAnimatorMenu()
         await focusEditor()
         // await sleep(5000)
+        // return
+        // copyElement()
+        // duplicateElement()
+        // return
 
-        openFormatOptions()
-        duplicateElement()
+        await setFormatPosition(Pos1)
+        addAnimation("Zoom out", "On click")
         // await sleep(1000)
-        await setFormatPosition(interpolatedCoords[i])
 
-        // await sleep(3000)
-        await addAnimation("Appear", "With previous",)
-        if (i !== interpolatedCoords.length - 1) {
-            await addAnimation("Zoom out", "After previous", 0.1)
+        for (let i = 0; i < interpolatedCoords.length; i += 1) {
+            setOverlay(true, i)
+            await focusEditor()
+            // await sleep(5000)
+
+            duplicateElement()
+            // await sleep(1000)
+            await setFormatPosition(interpolatedCoords[i])
+
+            // await sleep(3000)
+            await addAnimation("Appear", "With previous",)
+            if (i !== interpolatedCoords.length - 1) {
+                await addAnimation("Zoom out", "After previous", 0.1)
+            }
+            // await sleep(3000)
         }
-        // await sleep(3000)
+    } catch (e) {
+        console.error("Animation Generation Error:", e)
+    } finally {
+        setOverlay(false)
+        openAnimatorMenu()
     }
-    setOverlay(false)
 
 }
 
@@ -380,6 +405,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
             await initAnim()
         } else if (command === "finish") {
             await endAnim()
+        } else if (command === "generate") {
             await generateAnim()
         }
     }

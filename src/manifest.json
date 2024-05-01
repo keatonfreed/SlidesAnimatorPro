@@ -12,10 +12,6 @@
         "default_title": "Slides Animator Pro",
         "default_popup": "popup/popup.html"
     },
-    "permissions": [],
-    "host_permissions": [
-        "*://*/*"
-    ],
     "background": {
         "service_worker": "service-worker.js"
     },
@@ -30,7 +26,13 @@
             "suggested_key": {
                 "default": "Alt+Shift+2"
             },
-            "description": "Run Auto Animator"
+            "description": "End Auto Animator"
+        },
+        "generate": {
+            "suggested_key": {
+                "default": "Alt+Shift+3"
+            },
+            "description": "Generate Auto Animation"
         }
     },
     "content_scripts": [
