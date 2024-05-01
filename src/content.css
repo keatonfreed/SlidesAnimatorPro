@@ -64,7 +64,24 @@
 .punch-animation-sidebar-controls-container .punch-animation-sidebar-controls {
     background-color: var(--sap_background) !important;
     color: white !important;
+    border-top: none !important;
 }
+
+.punch-animation-sidebar-controls .punch-animation-sidebar-add-section {
+    display: flex;
+    /* justify-content: space-around; */
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.punch-animation-sidebar-add-section:has(.goog-flat-button-disabled) .slides-animator-pro-add {
+    background: #fff;
+    border: 1px solid #f1f3f4 !important;
+    color: #3c4043;
+    opacity: .38;
+    cursor: default !important;
+}
+
 
 /* main tiles */
 .punch-animation-sidebar-animation-header {
@@ -75,16 +92,117 @@
 .punch-animation-sidebar-tile-container {
     color: white !important;
     background-color: var(--sap_background) !important;
+    border: none !important;
 }
 
-.punch-animation-sidebar-tile-container .punch-sidebar-tile {
+.punch-animation-sidebar-tile-container,
+.punch-animation-sidebar-transition-container {
+    padding-left: 8px;
+    padding-right: 4px;
+}
+
+.punch-sidebar-tile {
     color: white !important;
     background-color: var(--sap_background) !important;
+    border-radius: 20px;
 }
 
-.punch-animation-sidebar-tile-container .punch-sidebar-tile.punch-animation-tile-highlighted {
-    filter: brightness(1.4);
+.punch-sidebar-tile .punch-sidebar-tile-header {
+    border: 1px solid #dadce0;
+    border-top: none !important;
+    border-radius: inherit;
+    box-sizing: border-box;
 }
+
+.punch-sidebar-tile .punch-sidebar-tile-header .punch-sidebar-tile-header-text {
+    font-weight: bold;
+}
+
+.punch-sidebar-tile.punch-animation-tile-highlighted,
+.punch-sidebar-tile .goog-zippy-expanded {
+    filter: brightness(1.5);
+}
+
+
+.slides-animator-pro-menu {
+    position: relative;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    padding-inline: 15px;
+    /* gap: 15px; */
+}
+
+.slides-animator-pro-menu .slides-animator-pro-menu-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    margin-bottom: 15px;
+}
+
+.slides-animator-pro-menu .slides-animator-pro-menu-header button {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    border: none;
+    color: white;
+    font-size: 17px;
+    /* margin: 15px 3px; */
+    height: min-content;
+    padding: 5px 12px;
+    cursor: pointer;
+}
+
+.slides-animator-pro-menu .slides-animator-pro-menu-header h1 {
+    margin: 0;
+    margin-right: 70px;
+    font-size: 28px;
+}
+
+.slides-animator-pro-menu>* {
+    width: 100%;
+    font-size: 25px;
+    margin: 0;
+}
+
+.slides-animator-pro-menu>h1 {
+    margin-top: 20px;
+}
+
+.slides-animator-pro-menu>button {
+    border-radius: 5px;
+    color: white;
+    border-color: inherit;
+    border-width: 2px;
+    background-color: var(--sap_background) !important;
+    padding: 10px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.slides-animator-pro-menu>button {
+    margin-top: 30px;
+}
+
+.slides-animator-pro-overlay {
+    pointer-events: none;
+    position: fixed;
+    z-index: 9999;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(1px);
+    opacity: 1;
+    transition: opacity 200ms ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    width: 100vw;
+    height: 100vh;
+    font-size: 35px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 
 /* .punch-animation-sidebar-tile-container .punch-sidebar-tile .punch-sidebar-tile-drag-handle {
     display: none !important;

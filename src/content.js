@@ -96,9 +96,112 @@ function runClick(el, onClick) {
     console.log("Element clicked.", x, y, point)
 }
 
+async function openAnimatorMenu() {
+    openAnimSidebar()
+    if (document.querySelector(".punch-animation-sidebar-add-section").firstChild.classList.contains("goog-flat-button-disabled")) return
+
+    if (!animProMenu) {
+        await sleep(200)
+    }
+    document.querySelector(".punch-animation-sidebar-scroll").style.display = "none"
+    animProMenu.style.display = "block"
+}
+
+let overlay, overlayText
+function setOverlay(active, current) {
+    console.log("OVERLAY", active, current, overlay)
+    if (!document.querySelector(".slides-animator-pro-overlay")) {
+        overlay = document.createElement("div")
+        overlay.className = "slides-animator-pro-overlay"
+        overlayText = document.createElement("h1")
+        overlayText.textContent = `Generating: 0/0`
+        overlay.appendChild(overlayText)
+        document.body.appendChild(overlay)
+    }
+    if (active) {
+        overlay.style.display = "flex"
+        overlay.style.opacity = 1
+        overlayText.textContent = `Generating: ${current}/${AnimAmount}`
+    } else {
+        overlay.style.opacity = 0
+        overlay.style.display = "none"
+    }
+}
+
+let animProMenu, animProMenuAmtTip, animProMenuAmount
 function sidebarPatch(sidebar) {
     let title = sidebar.querySelector("#punch-animation-sidebar-title")
     title.textContent = "Animator Pro"
+
+    let addBar = document.querySelector(".punch-animation-sidebar-controls .punch-animation-sidebar-add-section")
+    let newButton = document.createElement("button")
+    newButton.className = "goog-inline-block jfk-button jfk-button-standard goog-flat-button punch-animation-sidebar-add slides-animator-pro-add"
+    addBar.appendChild(newButton)
+    let addSVG = document.createElement("svg")
+    newButton.appendChild(addSVG)
+    addSVG.outerHTML = `<svg class="punch-animation-sidebar-add-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 10H10V15h-2V10H3v-2h5V3h2v5H15v1.5z" fill="#f29900"></path></svg>`
+    let newButtonText = document.createElement("div")
+    newButtonText.textContent = "Animator Pro Animation"
+    newButtonText.className = "punch-animation-sidebar-add-text"
+    newButton.appendChild(newButtonText)
+
+    animProMenu = document.createElement("div")
+    animProMenu.className = "slides-animator-pro-menu"
+    animProMenu.style.display = "none"
+    document.querySelector(".punch-animation-sidebar").appendChild(animProMenu)
+
+    let animProMenuHeader = document.createElement("div")
+    animProMenuHeader.className = "slides-animator-pro-menu-header"
+    animProMenu.appendChild(animProMenuHeader)
+
+    let animProMenuBack = document.createElement("button")
+    animProMenuBack.onclick = () => {
+        document.querySelector(".punch-animation-sidebar-scroll").style.display = "block"
+        animProMenu.style.display = "none"
+    }
+    animProMenuBack.textContent = "Back"
+    animProMenuHeader.appendChild(animProMenuBack)
+
+    let animProMenuTitle = document.createElement("h1")
+    animProMenuTitle.textContent = "New - Pro Animation"
+    animProMenuHeader.appendChild(animProMenuTitle)
+
+
+    let animProMenuStartTip = document.createElement("h1")
+    animProMenuStartTip.textContent = `Start`
+    animProMenu.appendChild(animProMenuStartTip)
+
+    let animProMenuStart = document.createElement("button")
+    animProMenuStart.textContent = "Reset"
+    animProMenu.appendChild(animProMenuStart)
+    animProMenuStart.onclick = (e) => {
+        initAnim()
+    }
+
+    animProMenuAmtTip = document.createElement("h1")
+    animProMenuAmtTip.textContent = `Amount (${AnimAmount})`
+    animProMenu.appendChild(animProMenuAmtTip)
+
+    animProMenuAmount = document.createElement("input")
+    animProMenuAmount.type = "range"
+    animProMenuAmount.min = 0
+    animProMenuAmount.max = 30
+    animProMenuAmount.value = AnimAmount
+    animProMenuAmount.oninput = (e) => {
+        AnimAmount = Number(e.target.value) || 0
+        animProMenuAmtTip.textContent = `Amount (${AnimAmount})`
+    }
+    animProMenu.appendChild(animProMenuAmount)
+
+    let animProMenuRun = document.createElement("button")
+    animProMenuRun.textContent = "Generate"
+    animProMenu.appendChild(animProMenuRun)
+    animProMenuRun.onclick = (e) => {
+        generateAnim()
+    }
+
+
+    newButton.onclick = openAnimatorMenu
 }
 
 async function openFormatOptions() {
@@ -211,54 +314,73 @@ function sleep(time) {
     return new Promise((res) => { setTimeout(res, time) })
 }
 
+async function initAnim() {
+
+    await openFormatOptions()
+    Pos1 = getFormatPosition()
+    await openAnimatorMenu()
+}
+async function endAnim() {
+    await openFormatOptions()
+    Pos2 = getFormatPosition()
+    await openAnimatorMenu()
+}
+async function generateAnim() {
+    if (!Pos1.length || !Pos2.length) return alert("Start or end position missing!")
+
+    // const MidPos = [Math.round((Pos2[0] + Pos1[0]) / 2), Math.round((Pos2[1] + Pos1[1]) / 2)]
+    console.log("Start", Pos1, "End", Pos2)
+    let interpolatedCoords = interpolateCoordinates([Pos1, Pos2], AnimAmount)
+    console.log(interpolatedCoords)
+
+    setOverlay(true, 0)
+    await focusEditor()
+    // await sleep(5000)
+    // return
+    // copyElement()
+    // duplicateElement()
+    // return
+    await setFormatPosition(Pos1)
+    addAnimation("Zoom out", "On click")
+    // await sleep(1000)
+
+    for (let i = 0; i < interpolatedCoords.length; i += 1) {
+        setOverlay(true, i)
+        await focusEditor()
+        // await sleep(5000)
+
+        openFormatOptions()
+        duplicateElement()
+        // await sleep(1000)
+        await setFormatPosition(interpolatedCoords[i])
+
+        // await sleep(3000)
+        await addAnimation("Appear", "With previous",)
+        if (i !== interpolatedCoords.length - 1) {
+            await addAnimation("Zoom out", "After previous", 0.1)
+        }
+        // await sleep(3000)
+    }
+    setOverlay(false)
+
+}
+
 
 let _State = 0
 let Pos1 = []
 let Pos2 = []
+let AnimAmount = 10
 
 chrome.runtime.onMessage.addListener(async (message) => {
     console.log(message)
     const command = message.animatorCommand
     if (command) {
-        await openFormatOptions()
 
         if (command === "init") {
-            Pos1 = getFormatPosition()
+            await initAnim()
         } else if (command === "finish") {
-            if (!Pos1) return alert("No Pos 1")
-            Pos2 = getFormatPosition()
-
-            // const MidPos = [Math.round((Pos2[0] + Pos1[0]) / 2), Math.round((Pos2[1] + Pos1[1]) / 2)]
-            console.log("Start", Pos1, "End", Pos2)
-            let interpolatedCoords = interpolateCoordinates([Pos1, Pos2], 5)
-            console.log(interpolatedCoords)
-
-            await focusEditor()
-            // await sleep(5000)
-            // return
-            // copyElement()
-            // duplicateElement()
-            // return
-            await setFormatPosition(Pos1)
-            addAnimation("Zoom out", "On click")
-            // await sleep(1000)
-
-            for (let i = 0; i < interpolatedCoords.length; i += 1) {
-                await focusEditor()
-                // await sleep(5000)
-
-                openFormatOptions()
-                duplicateElement()
-                // await sleep(1000)
-                await setFormatPosition(interpolatedCoords[i])
-
-                // await sleep(3000)
-                await addAnimation("Appear", "With previous",)
-                if (i !== interpolatedCoords.length - 1) {
-                    await addAnimation("Zoom out", "After previous", 0.1)
-                }
-                // await sleep(3000)
-            }
+            await endAnim()
+            await generateAnim()
         }
     }
 })
