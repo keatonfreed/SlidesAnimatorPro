@@ -1,6 +1,15 @@
 
 console.log("Slides Animator Pro: Loaded")
 
+// const sidebarTimeout = setTimeout(()=>{
+//     let sidebar = document.querySelector(".punch-animation-sidebar")
+//     if(sidebar) {
+
+//     } else {
+//         console.log("Slides Animator Pro: No sidebar detected")
+//     }
+// },5000)
+
 document.querySelector("div")
 
 const motionPanelCallback = (mutations, observer) => {
@@ -94,7 +103,7 @@ function runClick(el, onClick) {
         el.dispatchEvent(downEvent)
         el.dispatchEvent(upEvent)
     }
-    console.log("Element clicked.", x, y, point)
+    // console.log("Element clicked.", x, y, point)
 }
 
 async function openAnimatorMenu() {
@@ -142,6 +151,7 @@ function sidebarPatch(sidebar) {
     title.textContent = "Animator Pro"
 
     let addBar = document.querySelector(".punch-animation-sidebar-controls .punch-animation-sidebar-add-section")
+
     let newButton = document.createElement("button")
     newButton.className = "goog-inline-block jfk-button jfk-button-standard goog-flat-button punch-animation-sidebar-add slides-animator-pro-add"
     addBar.appendChild(newButton)
@@ -152,6 +162,67 @@ function sidebarPatch(sidebar) {
     newButtonText.textContent = "Animator Pro Animation"
     newButtonText.className = "punch-animation-sidebar-add-text"
     newButton.appendChild(newButtonText)
+    newButton.onclick = openAnimatorMenu
+
+
+    let quickAdd = document.createElement("div")
+    quickAdd.className = "slides-animator-pro-quick-add"
+
+    let quickAddGrid = document.createElement("div")
+    quickAddGrid.className = "slides-animator-pro-quick-add-grid"
+    quickAdd.appendChild(quickAddGrid)
+
+    let quickAnimTimeAmt = 1
+
+    let quickAddGroup = ["Fade in", "Fade out"]
+
+    let runningQuickAnim
+    for (let i = 0; i < quickAddGroup.length; i++) {
+        let groupDiv = document.createElement("div")
+        quickAddGrid.appendChild(groupDiv)
+
+        let groupTitle = document.createElement("p")
+        groupTitle.textContent = quickAddGroup[i]
+        groupDiv.appendChild(groupTitle)
+
+        let starts = { "Click": "On click", "With": "With previous", "After": "After previous" }
+        Object.entries(starts).forEach(([key, val], index) => {
+            let startButton = document.createElement("button")
+            groupDiv.appendChild(startButton)
+            startButton.textContent = key
+
+            startButton.onclick = async (e) => {
+                if (document.querySelector(".punch-animation-sidebar-add-section").firstChild.classList.contains("goog-flat-button-disabled") || runningQuickAnim) return
+                // let time = i > 0 ? Number(quickAnimTimeAmt) : null
+                let time = quickAnimTimeAmt
+                runningQuickAnim = true
+                quickAddGrid.style.opacity = 0.7
+                await addAnimation(quickAddGroup[i], val, time)
+                quickAddGrid.style.opacity = 1
+                runningQuickAnim = false
+            }
+        })
+
+    }
+
+    let quickAnimTimeTip = document.createElement("p")
+    quickAnimTimeTip.textContent = `1.0 seconds`
+
+    let quickAnimTime = document.createElement("input")
+    quickAnimTime.type = "range"
+    quickAnimTime.min = 0.0
+    quickAnimTime.max = 5.0 - 0.1
+    quickAnimTime.step = 0.1
+    quickAnimTime.value = 5 - quickAnimTimeAmt
+    quickAnimTime.oninput = (e) => {
+        quickAnimTimeAmt = 5 - Number(e.target.value)
+        quickAnimTimeTip.textContent = `${quickAnimTimeAmt.toFixed(1)} seconds`
+    };
+
+    quickAdd.appendChild(quickAnimTime)
+    quickAdd.appendChild(quickAnimTimeTip)
+
+    addBar.parentElement.insertBefore(quickAdd, addBar.nextSibling)
 
     animProMenu = document.createElement("div")
     animProMenu.className = "slides-animator-pro-menu"
@@ -217,7 +288,6 @@ function sidebarPatch(sidebar) {
     }
 
 
-    newButton.onclick = openAnimatorMenu
 }
 
 async function openFormatOptions() {
@@ -283,7 +353,7 @@ async function addAnimation(animType, animStart, time) {
         // await sleep(550)
         let slider = latestAnim.querySelector(".docs-material-slider.docs-material-slider-horizontal")
         let tooltip = slider.querySelector(".jfk-tooltip")
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 50; i++) {
             let prev = Number(tooltip.textContent.slice(0, 3))
             // console.log(tooltip.textContent, tooltip.textContent.slice(0, 3), prev, time.toFixed(1), time.toFixed(1) > prev)
             if (time.toFixed(1) > prev) {
